@@ -38,28 +38,16 @@ public class studentController {
         return new ApiResponse("Student at index " + index + " has been deleted successfully");
     }
 
-    @GetMapping("/classify-students")
-    public ApiResponse classifyStudents() {
-        ArrayList<Student> firstHonor = new ArrayList<>();
-        ArrayList<Student> secondHonor = new ArrayList<>();
-        ArrayList<Student> thirdHonor = new ArrayList<>();
+    @GetMapping("/classify-students/{index}")
+    public ApiResponse classifyStudents(@PathVariable int index) {
+        if (students.get(index).getGPA() >= 4.75)
+            return new ApiResponse("Student at index " + index + " is classified in first honor category!");
+        else if (students.get(index).getGPA() >= 4.5)
+            return new ApiResponse("Student at index " + index + " is classified in second honor category!");
+        else if (students.get(index).getGPA() >= 4.0)
+            return new ApiResponse("Student at index " + index + " is classified in third honor category!");
 
-        for (Student student : students) {
-            if (student.getGPA() >= 4.75) {
-                firstHonor.add(student);
-            } else if (student.getGPA() >= 4.5) {
-                secondHonor.add(student);
-            } else if (student.getGPA() >= 4) {
-                thirdHonor.add(student);
-            }
-        }
-
-        String classification = String.format(
-                "First Honor Students: %s, Second Honor Students: %s, Third Honor Students: %s",
-                firstHonor, secondHonor, thirdHonor
-        );
-
-        return new ApiResponse(classification);
+        return new ApiResponse("Student " + students.get(index).getName() + " is not classified in honor category!");
     }
 
     @GetMapping("/get-above-average")
